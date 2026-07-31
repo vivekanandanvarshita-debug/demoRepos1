@@ -3,6 +3,13 @@
 //class: DEEE/FT/1B/22
 //description: Monitoring Healthcare System
 
+#include <Wire.h> // make sure communication between Arduino and I2C devices
+#include "RichShieldTM1637.h" // allows TM1637 4-digit 7-segment display to be used
+#include "RichShieldNTC.h" // allows NTC temperature sensor to be used
+#define NTC_PIN A1 // (this is temperature sensor)
+NTC temperature(NTC_PIN);   // definition for temperature -> NTC = sensor type, temperature = name, NTC_PIN = input
+//by Yuqi
+
 #define LED_RED 4
 #define LED_GREEN 5
 #define LED_YELLOW 5
