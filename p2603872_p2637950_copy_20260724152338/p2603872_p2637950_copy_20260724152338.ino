@@ -18,13 +18,21 @@ NTC temperature(NTC_PIN);   // definition for temperature -> NTC = sensor type, 
 #define BUZZER 3
 #define CLK 10 //CLK of the TM1637 IC connected to D10 of OPEN-SMART UNO R3
 #define DIO 11 
+//by Varshita
 
-#define
+TM1637 display(CLK,DIO); // definition for display -> TM1637 = display module, display = name, CLK,DIO = communication pins
 
 void setup() {
   // put your setup code here, to run once:
-
+  Serial.begin(9600);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  disp.init();//The initialization of the display
+  delay(1000);
 }
+//by Yuqi
+
 
 void loop() {
   // put your main code here, to run repeatedly:
