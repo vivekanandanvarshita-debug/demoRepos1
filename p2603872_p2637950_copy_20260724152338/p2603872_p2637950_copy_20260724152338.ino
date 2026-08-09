@@ -2,6 +2,7 @@
 //adm no: p2603872, p2637950
 //class: DEEE/FT/1B/22
 //description: Monitoring Healthcare System
+CAN YOU SEE ME
 
 #define LED_RED 4
 #define LED_GREEN 5
@@ -14,7 +15,7 @@
 // by varshita
 
 void setup() {
-  // put your setup code here, to run once: 
+  // put your setup code here, to run once: CAN YOU SEE ME
 
 }
 
