@@ -2,11 +2,11 @@
 //adm no: p2603872, p2637950
 //class: DEEE/FT/1B/22
 //description: Monitoring Healthcare System
-
+VARSHITA IS ME
 #define LED_RED 4
 #define LED_GREEN 5
 #define LED_YELLOW 5
-#define BUTTON_K1 8
+#define BUTTON_K1 8  
 #define  BUTTON_K2 9
 #define   BUZZER 3
 #define CLK 10 //CLK of the TM1637 IC connected to D10 of OPEN-SMART UNO R3
