@@ -26,6 +26,7 @@ DHT dht;
 #define BUTTON_K1 8
 #define BUTTON_K2 9
 #define BUZZER 3
+
 PassiveBuzzer buz(BUZZER);
 #define CLK 10 //CLK of the TM1637 IC connected to D10 of OPEN-SMART UNO R3 - TM1637 Clock Pin
 #define DIO 11 //TM1637 Data Pin
@@ -37,9 +38,11 @@ TM1637 disp(CLK,DIO); // definition for display -> TM1637 = display module, disp
 int temperatureWarningStopped = 0;
 int showTime();
 int showTemperature(); 
+
 void lightBlink(int pinLight, int onTime, int offTime);
 void buzzerBlink(int onTime, int offTime);
 void lightUp(int pinLight, int On); 
+
 int knobValue;
 int knobReadings[7];
 //by Yuqi
@@ -69,7 +72,7 @@ void setup() {
   pinMode(PIN_LIGHT[0], OUTPUT);
   pinMode(PIN_LIGHT[1], OUTPUT);
   pinMode(PIN_LIGHT[2], OUTPUT);
-  pinMode(PIN_LIGHT[3], OUTPUT);// by Yuqi
+  pinMode(PIN_LIGHT[3], OUTPUT);// changed by Yuqi
   //by Varshita
 
   //by Yuqi
@@ -136,7 +139,6 @@ void loop()
     lightUp (PIN_LIGHT[2], 1);
     buzzerBlink(1000, 1000);
   }
-  
   }
 }
 //by Yuqi
@@ -163,7 +165,6 @@ int showTemperature() // THis allows temperature to be seen
     temp[2] = temperature % 10; // Show ones digit
     temp[3] = 12; // Index of 'C' for celsius degree symbol
   }
-
   disp.display(temp);
   delay(1000);
   // Display temperature 
@@ -208,7 +209,6 @@ int showTime()
     delay(10);
   }
   delay(30);
-
   return knobValue;
 }
 
@@ -244,7 +244,6 @@ void lightUp (int pinLight, int On) //turning off or on the light- without blink
 int lightSens()
 {
   int total = 0;
-
   for (int i = 0; i < 5; i++)
   {
     DHT dht;
@@ -255,7 +254,6 @@ int lightSens()
   }
 
   int ldrValue = total / 5;
-
   return ldrValue;
 }
 //by Varshita
@@ -273,15 +271,16 @@ int humidSens()
   int humidValue = humidtot / 5;
   return humidValue;
 }
-//by Yuqi
 
-//by Varshita
 void switchCase(int ldrValue, int humidValue)
 {
   if (humidValue <= 40 && ldrValue <= 240)
   {
     state = 3;
   }
+    //by Yuqi
+    
+    //by Varshita
   else 
   {if (humidValue >= 60)
     state = 2;
