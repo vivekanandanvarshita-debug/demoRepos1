@@ -45,12 +45,14 @@ int PIN_LIGHT[3] // array of LED lights
 {
   LED_RED,LED_GREEN,LED_YELLOW
 };
+//by Varshita
+
+//by Yuqi
 int BUTTON[2] //array of Buttons
 {
   BUTTON_K1, BUTTON_K2
 };
 
-//by Yuqi
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -85,7 +87,7 @@ void loop()
   //by Yuqi
   int temperature = showTemperature();
 
-  if ( temperature >= 24 && temperatureWarningStopped == 0)
+  if ( temperature >= 40 && temperatureWarningStopped == 0)
   {
     while(digitalRead(BUTTON[0]) == HIGH)
     {
@@ -102,9 +104,8 @@ void loop()
   //by Varshita
   else
   {
-    
     digitalWrite(PIN_LIGHT[1], HIGH);
-    delay(knobValue * 1000); //changed by Yuqi
+    delay((unsigned long)knobValue * 1000); //changed by Yuqi
     while (digitalRead(BUTTON[0]) == HIGH)
   {
     lightUp (PIN_LIGHT[1], 0 );
@@ -158,7 +159,7 @@ int showTime()
       delay(100);
     }
     knobValue = total / 7; // Calculate average
-    if (knobValue <= 999)
+    if (knobValue <= 72)
     {
       time[0] = (knobValue / 100) % 10; // looks like S
       time[1] = (knobValue / 10) % 10;
