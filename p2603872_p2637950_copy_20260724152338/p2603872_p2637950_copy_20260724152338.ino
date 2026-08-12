@@ -290,4 +290,3 @@ void switchCase(int ldrValue, int humidValue)
   }
 }
 //by Varshita
-//by Varshita
