@@ -9,16 +9,20 @@
 #include "RichShieldTM1637.h" // allows TM1637 4-digit 7-segment display to be used
 #include "RichShieldNTC.h" // allows NTC temperature sensor to be used
 #include "RichShieldPassiveBuzzer.h" // allows RichShield buzzer to be used
-
+#include "RichShieldDHT.h" //allows humility sensor to be used
 #define KNOB_PIN A0
 #define NTC_PIN A1 // (this is temperature sensor)
 NTC temper(NTC_PIN);   // definition for temperature -> NTC = sensor type, temperature = name, NTC_PIN = input
+DHT dht;
 //by Yuqi
 
 //by Varshita
+#include "RichShieldLightSensor.h" //light sensor
 #define LED_RED 4
 #define LED_GREEN 5
+#define LED_BLUE 6
 #define LED_YELLOW 7 //changed by Yuqi
+#define LDR_PIN 2 // light sensor
 #define BUTTON_K1 8
 #define BUTTON_K2 9
 #define BUZZER 3
@@ -41,10 +45,13 @@ int knobReadings[7];
 //by Yuqi
 
 //by Varshita
-int PIN_LIGHT[3] // array of LED lights 
+int PIN_LIGHT[4] // array of LED lights 
 {
-  LED_RED,LED_GREEN,LED_YELLOW
+  LED_RED,LED_GREEN,LED_YELLOW,LED_BLUE
 };
+int lightReadings[5];
+int humidReadings[5];
+int state;
 //by Varshita
 
 //by Yuqi
@@ -62,6 +69,7 @@ void setup() {
   pinMode(PIN_LIGHT[0], OUTPUT);
   pinMode(PIN_LIGHT[1], OUTPUT);
   pinMode(PIN_LIGHT[2], OUTPUT);
+  pinMode(PIN_LIGHT[3], OUTPUT);// by Yuqi
   //by Varshita
 
   //by Yuqi
@@ -72,6 +80,9 @@ void setup() {
   delay(100);
   knobValue = showTime();
   showTemperature(); 
+  int ldrValue = lightSens();
+  int humidValue = humidSens();
+  switchCase(ldrValue, humidValue);
 }
 //by Yuqi
 
@@ -87,7 +98,7 @@ void loop()
   //by Yuqi
   int temperature = showTemperature();
 
-  if ( temperature >= 40 && temperatureWarningStopped == 0)
+  if ( temperature >= 27 && temperatureWarningStopped == 0)
   {
     while(digitalRead(BUTTON[0]) == HIGH)
     {
@@ -99,11 +110,24 @@ void loop()
     lightUp (PIN_LIGHT[0], 0 );
     lightUp (PIN_LIGHT[1], 1 );
   }
-  //by Yuqi
-
-  //by Varshita
   else
   {
+    //by Varshita
+    switch(state)
+  {
+    case 1:
+      lightUp (PIN_LIGHT[3], 0 );
+      break;
+
+    case 2:
+      lightBlink(PIN_LIGHT[3], 1000, 700);
+      break;
+
+    case 3:
+      lightUp (PIN_LIGHT[3], 1 );
+      break;
+  }
+  //by Varshita
     digitalWrite(PIN_LIGHT[1], HIGH);
     delay((unsigned long)knobValue * 1000); //changed by Yuqi
     while (digitalRead(BUTTON[0]) == HIGH)
@@ -112,12 +136,12 @@ void loop()
     lightUp (PIN_LIGHT[2], 1);
     buzzerBlink(1000, 1000);
   }
+  
   }
 }
-//by Varshita
-
 //by Yuqi
 
+//by Yuqi
 int showTemperature() // THis allows temperature to be seen
 {
   float celsius = temper.getTemperature(); // Read temperature from sensor
@@ -214,6 +238,55 @@ void lightUp (int pinLight, int On) //turning off or on the light- without blink
   else
   {
     digitalWrite(pinLight, LOW);
+  }
+}
+
+int lightSens()
+{
+  int total = 0;
+
+  for (int i = 0; i < 5; i++)
+  {
+    DHT dht;
+    LightSensor lightsensor;
+    lightReadings[i] = lightsensor.getRes();
+    total = total + lightReadings[i];
+    delay(100);
+  }
+
+  int ldrValue = total / 5;
+
+  return ldrValue;
+}
+//by Varshita
+
+//by Yuqi
+int humidSens()
+{
+  int humidtot = 0;
+  for (int i = 0; i < 5; i++)
+  {
+    humidReadings[i] = dht.readHumidity();
+    humidtot = humidtot + humidReadings[i];
+    delay(100);
+  }
+  int humidValue = humidtot / 5;
+  return humidValue;
+}
+//by Yuqi
+
+//by Varshita
+void switchCase(int ldrValue, int humidValue)
+{
+  if (humidValue <= 40 && ldrValue <= 240)
+  {
+    state = 3;
+  }
+  else 
+  {if (humidValue >= 60)
+    state = 2;
+  else
+    state = 1;
   }
 }
 //by Varshita
