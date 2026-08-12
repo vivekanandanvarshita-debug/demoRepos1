@@ -10,6 +10,7 @@
 #include "RichShieldNTC.h" // allows NTC temperature sensor to be used
 #include "RichShieldPassiveBuzzer.h" // allows RichShield buzzer to be used
 
+#define KNOB_PIN A0
 #define NTC_PIN A1 // (this is temperature sensor)
 NTC temper(NTC_PIN);   // definition for temperature -> NTC = sensor type, temperature = name, NTC_PIN = input
 //by Yuqi
@@ -17,13 +18,7 @@ NTC temper(NTC_PIN);   // definition for temperature -> NTC = sensor type, tempe
 //by Varshita
 #define LED_RED 4
 #define LED_GREEN 5
-//by Varshita
-
-//changed by Yuqi
-#define LED_YELLOW 7 
-//changed by Yuqi
-
-//by Varshita
+#define LED_YELLOW 7 //changed by Yuqi
 #define BUTTON_K1 8
 #define BUTTON_K2 9
 #define BUZZER 3
@@ -36,9 +31,13 @@ PassiveBuzzer buz(BUZZER);
 TM1637 disp(CLK,DIO); // definition for display -> TM1637 = display module, display = name, CLK,DIO = communication pins - by Yuqi
 
 int temperatureWarningStopped = 0;
-int showTemperature();
+int showTime();
+int showTemperature(); 
 void lightBlink(int pinLight, int onTime, int offTime);
 void buzzerBlink(int onTime, int offTime);
+void lightUp(int pinLight, int On); 
+int knobValue;
+int knobReadings[7];
 //by Yuqi
 
 //by Varshita
@@ -69,19 +68,23 @@ void setup() {
   pinMode(BUZZER, OUTPUT);
   disp.init(); //The initialization of the display
   delay(100);
+  knobValue = showTime();
+  showTemperature(); 
 }
 //by Yuqi
 
 //by Varshita
-void loop() {
+void loop() 
+{
   // put your main code here, to run repeatedly:
   lightUp (PIN_LIGHT[1], 1 );
   lightUp (PIN_LIGHT[2], 0 );
   lightUp (PIN_LIGHT[0], 0 );
-  int temperature = showTemperature();
   //by Varshita
-
+  
   //by Yuqi
+  int temperature = showTemperature();
+
   if ( temperature >= 24 && temperatureWarningStopped == 0)
   {
     while(digitalRead(BUTTON[0]) == HIGH)
@@ -101,7 +104,7 @@ void loop() {
   {
     
     digitalWrite(PIN_LIGHT[1], HIGH);
-    delay(30000);
+    delay(knobValue * 1000); //changed by Yuqi
     while (digitalRead(BUTTON[0]) == HIGH)
   {
     lightUp (PIN_LIGHT[1], 0 );
@@ -113,22 +116,24 @@ void loop() {
 //by Varshita
 
 //by Yuqi
+
 int showTemperature() // THis allows temperature to be seen
 {
   float celsius = temper.getTemperature(); // Read temperature from sensor
   int temperature = (int)celsius; // Change decimal temperature into a whole number
   int8_t temp[4]; // Array for the four display positions
-  temp[0] = INDEX_BLANK; // We are not going into negatives, so the first position is blank
 
   if (temperature <= 10 || temperature >= 67)
   {
-    temp[1] = INDEX_BLANK;
-    temp[2] = INDEX_BLANK;
-    temp[3] = INDEX_BLANK;
+    temp[0] = INDEX_NEGATIVE_SIGN;
+    temp[1] = INDEX_NEGATIVE_SIGN;
+    temp[2] = INDEX_NEGATIVE_SIGN;
+    temp[3] = INDEX_NEGATIVE_SIGN;
   }
   // Prevent temperatures that doesnt blong to a human
   else
   {
+    temp[0] = INDEX_BLANK; // We are not going into negatives, so the first position is blank
     temp[1] = temperature / 10; // Show tens digit
     temp[2] = temperature % 10; // Show ones digit
     temp[3] = 12; // Index of 'C' for celsius degree symbol
@@ -138,6 +143,48 @@ int showTemperature() // THis allows temperature to be seen
   delay(1000);
   // Display temperature 
   return temperature; // Give temperture to main program
+}
+
+int showTime()
+{
+  while (digitalRead(BUTTON[1]) == HIGH) // keep adjusting until K2 is pressed
+  {
+    int8_t time[4]; 
+    int total = 0;
+    for (int i = 0; i < 7; i++)
+    {
+      knobReadings[i] = analogRead(KNOB_PIN);
+      total = total + knobReadings[i];
+      delay(100);
+    }
+    knobValue = total / 7; // Calculate average
+    if (knobValue <= 999)
+    {
+      time[0] = (knobValue / 100) % 10; // looks like S
+      time[1] = (knobValue / 10) % 10;
+      time[2] = knobValue % 10;
+      time[3] = 5;
+      disp.display(time);
+      delay(30);
+    }
+    else
+    {
+      time[0] = INDEX_NEGATIVE_SIGN;
+      time[1] = INDEX_NEGATIVE_SIGN;
+      time[2] = INDEX_NEGATIVE_SIGN;
+      time[3] = INDEX_NEGATIVE_SIGN;
+      disp.display(time);
+      delay(30);
+    }
+  }
+  delay(100); // prevents K1 from being detected twice
+  while (digitalRead(BUTTON[1]) == LOW)
+  {
+    delay(10);
+  }
+  delay(30);
+
+  return knobValue;
 }
 
 void lightBlink(int pinLight, int onTime, int offTime) // This allows the lights to be on, set up for all the lights
