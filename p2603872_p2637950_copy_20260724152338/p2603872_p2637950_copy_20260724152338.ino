@@ -112,6 +112,8 @@ void loop()
     temperatureWarningStopped = 1;
     lightUp (PIN_LIGHT[0], 0 );
     lightUp (PIN_LIGHT[1], 1 );
+    delay(20000);//delay 20 seconds so that can check temperature
+    temperatureWarningStopped -= 1;
   }
   else
   {
