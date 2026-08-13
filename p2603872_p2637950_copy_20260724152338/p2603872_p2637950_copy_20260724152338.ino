@@ -68,8 +68,8 @@ void setup() {
   Serial.begin(9600);
   //by Yuqi
 
-  //by Varshita
-  pinMode(PIN_LIGHT[0], OUTPUT);
+  //by Varshita  //led array
+  pinMode(PIN_LIGHT[0], OUTPUT); 
   pinMode(PIN_LIGHT[1], OUTPUT);
   pinMode(PIN_LIGHT[2], OUTPUT);
   pinMode(PIN_LIGHT[3], OUTPUT);// changed by Yuqi
@@ -93,7 +93,7 @@ void setup() {
 void loop() 
 {
   // put your main code here, to run repeatedly:
-  lightUp (PIN_LIGHT[1], 1 );
+  lightUp (PIN_LIGHT[1], 1 ); 
   lightUp (PIN_LIGHT[2], 0 );
   lightUp (PIN_LIGHT[0], 0 );
   //by Varshita
@@ -118,18 +118,18 @@ void loop()
   else
   {
     //by Varshita
-    switch(state)
+    switch(state) //controls blue led of diff humidity levels gives state based on the humidity
   {
     case 1:
-      lightUp (PIN_LIGHT[3], 0 );
+      lightUp (PIN_LIGHT[3], 0 );  //default humidity is normal 
       break;
 
     case 2:
-      lightBlink(PIN_LIGHT[3], 1000, 700);
+      lightBlink(PIN_LIGHT[3], 1000, 700);  // too dry = lights up once
       break;
 
     case 3:
-      lightUp (PIN_LIGHT[3], 1 );
+      lightUp (PIN_LIGHT[3], 1 ); //too damp = light up continously
       break;
   }
   //by Varshita
