@@ -132,6 +132,7 @@ void loop()
       lightUp (PIN_LIGHT[3], 1 ); //too damp = light up continously
       break;
   }
+  }
   //by Varshita
     digitalWrite(PIN_LIGHT[1], HIGH);
     delay((unsigned long)knobValue * 1000); //changed by Yuqi
