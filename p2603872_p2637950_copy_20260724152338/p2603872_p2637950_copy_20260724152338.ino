@@ -102,7 +102,24 @@ void loop()
   //by Yuqi
 
   //by Varshita
-  else
+    else
+  {
+    //by Varshita
+    switch(state) //controls blue led of diff humidity levels gives state based on the humidity
+  {
+    case 1:
+      lightUp (PIN_LIGHT[3], 0 );  //default humidity is normal 
+      break;
+
+    case 2:
+      lightBlink(PIN_LIGHT[3], 1000, 700);  // too dry = lights up once
+      break;
+
+    case 3:
+      lightUp (PIN_LIGHT[3], 1 ); //too damp = light up continously
+      break;
+  }
+  }
   {
     digitalWrite(PIN_LIGHT[1], HIGH);
     delay((unsigned long)knobValue * 1000); //changed by Yuqi
