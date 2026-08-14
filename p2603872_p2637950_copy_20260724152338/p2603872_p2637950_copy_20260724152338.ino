@@ -277,7 +277,7 @@ int humidSens()
 
 void switchCase(int ldrValue, int humidValue)
 {
-  if (humidValue <= 40 && ldrValue <= 240)
+  if (humidValue <= 40 && ldrValue <= 240)  //normal humidity
   {
     state = 3;
   }
@@ -285,10 +285,10 @@ void switchCase(int ldrValue, int humidValue)
     
     //by Varshita
   else 
-  {if (humidValue >= 60)
+  {if (humidValue >= 60)   // too dry led blinks once
     state = 2;
   else
-    state = 1;
+    state = 1;  //too damp led blinks continously
   }
 }
 //by Varshita
