@@ -125,11 +125,11 @@ void loop()
       break;
 
     case 2:
-      lightBlink(PIN_LIGHT[3], 1000, 700);  // too dry = lights up once
+      lightBlink(PIN_LIGHT[3], 1000, 700);  // too damp = lights up once
       break;
 
     case 3:
-      lightUp (PIN_LIGHT[3], 1 ); //too damp = light up continously
+      lightUp (PIN_LIGHT[3], 1 ); //too dry = light up continously
       break;
   }
   }
@@ -277,7 +277,7 @@ int humidSens()
 
 void switchCase(int ldrValue, int humidValue)
 {
-  if (humidValue <= 40 && ldrValue <= 240)  //normal humidity
+  if (humidValue <= 40 || ldrValue <= 240)  //too dry
   {
     state = 3;
   }
@@ -285,10 +285,10 @@ void switchCase(int ldrValue, int humidValue)
     
     //by Varshita
   else 
-  {if (humidValue >= 60)   // too dry led blinks once
+  {if (humidValue >= 60)   // too moist/damp
     state = 2;
   else
-    state = 1;  //too damp led blinks continously
+    state = 1;  //normal, nothing happens
   }
 }
 //by Varshita
