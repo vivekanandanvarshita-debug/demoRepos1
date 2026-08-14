@@ -45,6 +45,9 @@ void lightUp(int pinLight, int On);
 
 int knobValue;
 int knobReadings[7];
+int lightSens();
+int humidSens();
+void switchCase(int ldrValue, int humidValue);
 //by Yuqi
 
 //by Varshita
@@ -141,7 +144,6 @@ void loop()
     lightUp (PIN_LIGHT[1], 0 );
     lightUp (PIN_LIGHT[2], 1);
     buzzerBlink(1000, 1000);
-  }
   }
 }
 //by Yuqi
