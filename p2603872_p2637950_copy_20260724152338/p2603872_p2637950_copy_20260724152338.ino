@@ -86,9 +86,6 @@ void setup() {
   delay(100);
   knobValue = showTime();
   showTemperature(); 
-  int ldrValue = lightSens();
-  int humidValue = humidSens();
-  switchCase(ldrValue, humidValue);
 }
 //by Yuqi
 
@@ -121,6 +118,9 @@ void loop()
   else
   {
     //by Varshita
+    int ldrValue = lightSens();
+    int humidValue = humidSens();
+    switchCase(ldrValue, humidValue);
     switch(state) //controls blue led of diff humidity levels gives state based on the humidity
   {
     case 1:
@@ -128,12 +128,7 @@ void loop()
       break;
 
     case 2:
-      lightBlink(PIN_LIGHT[3], 200, 700);  // too damp = lights up once
-      break;
-
-    case 3:
-      lightUp (PIN_LIGHT[3], 1 ); //too dry = light up continously
-      delay(2000);
+      lightBlink(PIN_LIGHT[3], 15000, 700);  // too damp = lights up once
       break;
   }
   }
@@ -280,17 +275,15 @@ int humidSens()
 
 void switchCase(int ldrValue, int humidValue)
 {
-  if (humidValue <= 40 || ldrValue <= 70)  //too dry
+  if (humidValue >= 60 || ldrValue <= 70)  //too damp
   {
-    state = 3;
+    state = 2;
   }
     //by Yuqi
     
     //by Varshita
   else 
-  {if (humidValue >= 60) // too moist/damp
-    state = 2;
-  else
+  {
     state = 1;  //normal, nothing happens
   }
 }
