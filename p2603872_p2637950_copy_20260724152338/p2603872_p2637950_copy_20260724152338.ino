@@ -104,7 +104,7 @@ void loop()
   //by Yuqi
   int temperature = showTemperature();
 
-  if ( temperature >= 27 && temperatureWarningStopped == 0)
+  if ( temperature >= 40 && temperatureWarningStopped == 0)
   {
     while(digitalRead(BUTTON[0]) == HIGH)
     {
@@ -121,6 +121,9 @@ void loop()
   else
   {
     //by Varshita
+    int ldrValue = lightSens();
+    int humidValue = humidSens();
+    switchCase(ldrValue, humidValue);
     switch(state) //controls blue led of diff humidity levels gives state based on the humidity
   {
     case 1:
@@ -279,7 +282,7 @@ int humidSens()
 
 void switchCase(int ldrValue, int humidValue)
 {
-  if (humidValue <= 40 || ldrValue <= 240)  //too dry
+  if (humidValue <= 40 || ldrValue <= 70)  //too dry
   {
     state = 3;
   }
@@ -287,7 +290,7 @@ void switchCase(int ldrValue, int humidValue)
     
     //by Varshita
   else 
-  {if (humidValue >= 60)   // too moist/damp
+  {if (humidValue >= 60) // too moist/damp
     state = 2;
   else
     state = 1;  //normal, nothing happens
