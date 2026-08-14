@@ -128,11 +128,12 @@ void loop()
       break;
 
     case 2:
-      lightBlink(PIN_LIGHT[3], 1000, 700);  // too damp = lights up once
+      lightBlink(PIN_LIGHT[3], 200, 700);  // too damp = lights up once
       break;
 
     case 3:
       lightUp (PIN_LIGHT[3], 1 ); //too dry = light up continously
+      delay(2000);
       break;
   }
   }
