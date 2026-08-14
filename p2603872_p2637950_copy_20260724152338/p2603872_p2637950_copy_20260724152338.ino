@@ -104,7 +104,7 @@ void loop()
   //by Yuqi
   int temperature = showTemperature();
 
-  if ( temperature >= 40 && temperatureWarningStopped == 0)
+  if ( temperature >= 27 && temperatureWarningStopped == 0)
   {
     while(digitalRead(BUTTON[0]) == HIGH)
     {
@@ -121,9 +121,6 @@ void loop()
   else
   {
     //by Varshita
-    int ldrValue = lightSens();
-    int humidValue = humidSens();
-    switchCase(ldrValue, humidValue);
     switch(state) //controls blue led of diff humidity levels gives state based on the humidity
   {
     case 1:
@@ -131,11 +128,12 @@ void loop()
       break;
 
     case 2:
-      lightBlink(PIN_LIGHT[3], 1000, 700);  // too damp = lights up once
+      lightBlink(PIN_LIGHT[3], 200, 700);  // too damp = lights up once
       break;
 
     case 3:
       lightUp (PIN_LIGHT[3], 1 ); //too dry = light up continously
+      delay(2000);
       break;
   }
   }
